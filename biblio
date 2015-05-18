@@ -1,0 +1,52 @@
+On cherche:
+1) fonctionnement des attaques
+2) infos qu'elles permettent d'obtenir
+3) contre mesures
+
+Cache-timing attacks on AES - Daniel J.Bernstein
+- décrit en détail l'attaque sur AES..
+- discussion sur les tentatives d'obtenir un temps constant
+- présente en détail les différents obstacles au temps constant
+
+Cache-Timing Template Attacks - Billy Bob Brumley, Risto M. Hakala
+- méthodes automatiques d'analyse d'attaques de cache
+- Hiden Markov Models (explication en profondeur et application aux attaques de
+  cache)
+- exemple sur courbe elliptique d'openssl. 
+- présente bien le fonctionnement des caches et de openssl
+- SoA
+- présente contre mesures
+
+
+Efficient Cache Attacks on AES, and Countermeasures - Eran Tromer, Dag Arne Osvik, Adi Shamir 
+- papier très long
+- dans un premier temps s'attarde plus sur la méthode que sur la crypto,
+  explique le fonctionnement des caches
+- même avec virtualisation
+- SoA sur d'autres méthodes d'accès aux caches/contre mesures
+
+Trace-Driven Cache Attacks on AES - Onur Acıiçmez, Çetin Kaya Koç
+- SoA
+- coût des attaques (nb de traces nécessaires) 
+- présente 3 types d'attaques sur les caches: time-driven, trace-driven,
+  access-driven. 
+
+Cache Attacks and Countermeasures: The Case of AES -  Dag Arne Osvik, Adi Shamir, Eran Tromer 
+- SoA
+- différents types d'attaque (synchronous, one/two round(s) atk) 
+- contre mesures (assez complet)
+
+Timing Attacks on Implementations of Diffie-Hellman, RSA, DSS, and Other Systems -  Paul C. Kocher
+- présentation de l'attaque générale
+- résultats chiffrés
+- présente aussi des contre mesures
+
+Faster and Timing-Attack Resistant AES-GCM - Emilia Käsper, Peter Schwabe 
+- présente une implémentation en temps constant (après avoir rappelé l'attaque)
+- dire que ça existe, insister sur les difficultés (pas avoir une vision trop
+  trop technique de ce papier)
+
+A Cache Timing Attack on AES in Virtualization Environments - Michael Weiß, Benedikt Heinz, Frederic Stumpf 
+- payant, creuser pour en trouver d'autres sur la virtualisation
+
+ 
