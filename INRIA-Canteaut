@@ -1,0 +1,19 @@
+INRIA Understanding Cache Attacks (2006)
+
+Attention : article ancien, bas? sur Pentium 4 => quel impact a le multi-core???
+
+3 types d'attaques :
+	-From empty cache
+		Effectuer de nombreuses operations afin de vider le cache. Puis, attaques bas?es sur misses.
+		Similaire a timings attacks, le temps miss/hit est different.
+		Probleme : comment distinguer entre cold start miss et conflict miss (seuls utiles pour l'attaque) Attaque compliquee a mettre en oeuvre des lors que le cache est grand (possible sur pentium 3, mais pas sur pentium 4)
+	-From initialized cache
+		Principe similaire sauf que l'on fait ca par timing attack au milieu d'une execution, donc pas de probleme d'identification entre conflict et cold start. Se fait en considerant que quand il arrive un miss, alors cela correspond ? un certain type d'evenement, et donc donne des informations sur la cle. (6.1)
+	-From loaded cache
+		Maintenant, si les miss n'ont plus lieu, besoin de mettre en oeuvre nouveau type d'attaque. Comparaison comparaison ? clair connu du temps d'ex?cution. Attaque sur temps de chiffrement. 
+
+
+AES with lookup tables
+-SubByte and MixColumns hard to implement on processors
+=> Use of lookup tables
+
