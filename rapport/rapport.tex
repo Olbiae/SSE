@@ -42,11 +42,30 @@
 
 \section*{Introduction}
 
+\section{Fonctionnement du cache}
+"2.1 Data Caches"~\cite{brumley2009cache}\\
+"2.1. Memory and Cache Structure"~\cite{tromer2010efficient}
+
 \section{Fonctionnement des attaques}
 
-\section{Informations récupérablés}
+à chaque fois dire quelles informations on récupère
+
+\subsection{Cas d'AES}
+\begin{description}
+\item[on récupère] la clé AES
+\item[pourquoi] difficulté d'implémenter algo en temps constant (détailler les raisons)
+\item[comment] détailler~\cite{bernstein2005cache} + (\cite{tromer2010efficient} et~\cite{osvik2006cache}(mêmes auteurs)) et contre mesures 
+\end{description}
+
+\subsection{elliptic curve portion of OpenSSL}
+pertinent?~\cite{brumley2009cache}
+
+\subsection{RSA, Diffie-Hellman}
+~\cite{kocher1996timing}
 
 \section{Contre-mesures}
+A mettre avec le fonctionnement des attaques? (cf tous les papiers qui expliquent les attaques)\\
+Implémentation d'AES résistante aux timing attacks~\cite{kasper2009faster}
 
 \section*{Conclusion}
 
