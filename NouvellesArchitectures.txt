@@ -1,0 +1,20 @@
+- Are AES x86 Cache Timing Attacks Still Feasible ? - K. Mowery - S. Keelveedhi -
+H. Shacham
+
+Plupart des cache timing attack men√es sur processeurs x86 monocoeur (ex :
+Pentium III)
+
+Nouvelles architectures cr√√s nouveaux obstacles :
+- Depuis AES-NI, AES int√©gr√© mat√©riellement dans processeurs Intel => plus
+besoin d'utiliser les caches.
+- Multicoeurs avec cache L1 et L2
+- Logiciels plus complexes et faisant plus appel au cache => obfuscation
+- Processeurs modernes plus complexes et moins document√s
+- Virtualisation
+
+Les deux premiers items peuvent rendre les timing attacks impossibles
+Les 3 suivants les complexifient.
+
+
+
+
