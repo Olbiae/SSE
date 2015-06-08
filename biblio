@@ -25,16 +25,16 @@ Efficient Cache Attacks on AES, and Countermeasures - Eran Tromer, Dag Arne Osvi
 - même avec virtualisation
 - SoA sur d'autres méthodes d'accès aux caches/contre mesures
 
+Cache Attacks and Countermeasures: The Case of AES -  Dag Arne Osvik, Adi Shamir, Eran Tromer 
+- SoA
+- différents types d'attaque (synchronous, one/two round(s) atk) 
+- contre mesures (assez complet)
+
 Trace-Driven Cache Attacks on AES - Onur Acıiçmez, Çetin Kaya Koç
 - SoA
 - coût des attaques (nb de traces nécessaires) 
 - présente 3 types d'attaques sur les caches: time-driven, trace-driven,
   access-driven. 
-
-Cache Attacks and Countermeasures: The Case of AES -  Dag Arne Osvik, Adi Shamir, Eran Tromer 
-- SoA
-- différents types d'attaque (synchronous, one/two round(s) atk) 
-- contre mesures (assez complet)
 
 Timing Attacks on Implementations of Diffie-Hellman, RSA, DSS, and Other Systems -  Paul C. Kocher
 - présentation de l'attaque générale

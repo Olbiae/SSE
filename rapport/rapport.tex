@@ -1,0 +1,59 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[francais]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[pdftex]{graphicx}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{fancyheadings}
+\usepackage{lastpage}
+\usepackage{fullpage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\newcommand{\reporttitle}{Titre}
+\newcommand{\reportauthor}{Auteurs}
+\newcommand{\reportdate}{\today}
+
+\lhead{}
+\rhead{\leftmark \rightmark}
+\cfoot{Page \thepage/\pageref{LastPage}}
+
+
+\begin{document}	
+
+\begin{center}
+
+\begin{minipage}[t]{0.4\textwidth}
+  \begin{flushleft} \large
+    \reportauthor
+  \vfill
+  \end{flushleft}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+  \begin{flushright}
+  \includegraphics [width=30mm]{figures/tpt.jpg} \\[0.5cm]
+  \end{flushright}
+\end{minipage}
+\HRule \\[0.5cm]
+{\huge \bfseries \reporttitle}\\[0.3cm]
+\HRule \\[1.5cm]
+
+\end{center}
+
+\section*{Introduction}
+
+\section{Fonctionnement des attaques}
+
+\section{Informations récupérablés}
+
+\section{Contre-mesures}
+
+\section*{Conclusion}
+
+\newpage
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{ref}
+
+
+\end{document}
