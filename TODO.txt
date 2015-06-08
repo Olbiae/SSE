@@ -1,0 +1,6 @@
+TODO List
+
+- Virtualisation
+- ARM
+- Attaques sur x86 et nouvelles architectures
+- RSA?
