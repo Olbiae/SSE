@@ -4,3 +4,6 @@ TODO List
 - ARM
 - Attaques sur x86 et nouvelles architectures
 - RSA?
+
+- Ouverture : autres attaques sur composant d'architecture processeur (ex :
+  composant de branchement predictif)

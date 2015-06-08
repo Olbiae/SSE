@@ -1,19 +1,34 @@
 - Are AES x86 Cache Timing Attacks Still Feasible ? - K. Mowery - S. Keelveedhi -
 H. Shacham
 
-Plupart des cache timing attack menÃes sur processeurs x86 monocoeur (ex :
+Plupart des cache timing attack menées sur processeurs x86 monocoeur (ex :
 Pentium III)
 
 Nouvelles architectures crÃÃs nouveaux obstacles :
-- Depuis AES-NI, AES intÃ©grÃ© matÃ©riellement dans processeurs Intel => plus
+- Depuis AES-NI, AES intégré matériellement dans processeurs Intel => plus
 besoin d'utiliser les caches.
-- Multicoeurs avec cache L1 et L2
+    * Disponible depuis arch Ivy Bridge (i5 et i7)
+      Cependant, pas encore utilisé par toutes les aplis (implémentation
+      existe sur OpenSSL)
+- Multicoeurs avec cache L1 et L2 , 
+    * Pas possible d'observer utilisation du cache car processus espion
+      utilise autre coeur => Sandy Bridge : cache L1 et L2 propre au
+processeur seul cache L3 partagées entre coeurs. Complique grandement attaque
+    * Solution : créer de nombreux thread attaquant => ainsi, probabilit
+      d'avoir un thread attaquant par coeur => possibilité mener mêmes
+      attaques (Attaque de Gullash).
+    * Contremesure : bloquer le coeur utilisé pour le chiffrement, ainsi,
+      seul le processus chiffrant tourne dessus.
 - Logiciels plus complexes et faisant plus appel au cache => obfuscation
+    * Exemple avec NaCl sur chromium => mise en place attaque efficace,
+      retrouve clé en 2^36
 - Processeurs modernes plus complexes et moins documentÃs
 - Virtualisation
 
 Les deux premiers items peuvent rendre les timing attacks impossibles
 Les 3 suivants les complexifient.
+
+
 
 
 
