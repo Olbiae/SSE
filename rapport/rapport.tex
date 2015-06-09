@@ -48,26 +48,24 @@
 "2.1. Memory and Cache Structure"~\cite{tromer2010efficient}\\
 Article Canteaut~\cite{canteaut2006understanding}
 
-\section{Fonctionnement des attaques}
+\section{Exemple d'attaque: le cas d'AES}
 
-à chaque fois dire quelles informations on récupère
-
-\subsection{Cas d'AES}
 \begin{description}
 \item[on récupère] la clé AES
 \item[pourquoi] difficulté d'implémenter algo en temps constant (détailler les raisons)
-\item[comment] détailler~\cite{bernstein2005cache} + (\cite{tromer2010efficient} et~\cite{osvik2006cache}(mêmes auteurs)) et contre mesures 
+\item[comment] détailler~\cite{bernstein2005cache} + (\cite{tromer2010efficient} et~\cite{osvik2006cache}(mêmes auteurs)) + ~\cite{canteaut2006understanding}
+\item[contre mesures] Implémentation d'AES résistante aux timing attacks~\cite{kasper2009faster}
 \end{description}
 
-\subsection{elliptic curve portion of OpenSSL}
-pertinent?~\cite{brumley2009cache}
+\section{Difficultés rencontées lors des attaques} %TODO reformuler: juste "contre mesures"?
+Ça c'est basique mais maintenant:
+\begin{itemize}
+\item[évolutions techniques qui créent des difficultés] virtualisation, multi coeurs
+\item[contre mesures avancées]  puces crypto dédiées, algos différents.. cf papiers "contre mesures" dans biblio
+\end{itemize}
 
-\subsection{RSA, Diffie-Hellman}
-~\cite{kocher1996timing}
-
-\section{Contre-mesures}
-A mettre avec le fonctionnement des attaques? (cf tous les papiers qui expliquent les attaques)\\
-Implémentation d'AES résistante aux timing attacks~\cite{kasper2009faster}
+\section{Contournements}
+Attaques à l'heure actuelle : mise en place, contournement des contre mesures
 
 \section*{Conclusion}
 
