@@ -40,16 +40,18 @@
 
 \end{center}
 
-\section*{Introduction}
+\section*{Introduction} %TODO
 
 \section{Fonctionnement du cache}
 
+%C
 "2.1 Data Caches"~\cite{brumley2009cache}\\
 "2.1. Memory and Cache Structure"~\cite{tromer2010efficient}\\
 Article Canteaut~\cite{canteaut2006understanding}
 
 \section{Exemple d'attaque: le cas d'AES}
 
+%J
 \begin{description}
 \item[on récupère] la clé AES
 \item[pourquoi] difficulté d'implémenter algo en temps constant (détailler les raisons) donc les traces du chiffrement (cache hit/miss) permettent d'en déduire des infos
@@ -59,22 +61,23 @@ Article Canteaut~\cite{canteaut2006understanding}
 \section{Difficultés rencontées lors des attaques} %TODO reformuler: juste "contre mesures"? mais il y a des difficultés "naturelles" et d'autres voulues
 Ça c'est basique mais maintenant:
 
-\paragraph{possibilité d'accès en direct au moment du chiffrement?} attaque synchrone/asynchrone~\cite{osvik2006cache}
-\paragraph{mesure du temps:} facile si multithread. Différentes méthodes: statistiques (nécessite de bien connaître l'archi), ou bien on crée un cache hit et on mesure, puis on crée un cache miss et on mesure.
-\paragraph{présence de bruit:} rend difficile la récupération des traces du chiffrement et donc ..
-\paragraph{évolutions techniques qui créent des difficultés:} virtualisation~\cite{weiss2012cache}, multi coeurs. 
-\paragraph{difficile pour AES sur x86}~\cite{mowery2012aes} 
+\paragraph{possibilité d'accès en direct au moment du chiffrement?} attaque synchrone/asynchrone~\cite{osvik2006cache} %C
+\paragraph{mesure du temps:} facile si multithread. Différentes méthodes: statistiques (nécessite de bien connaître l'archi), ou bien on crée un cache hit et on mesure, puis on crée un cache miss et on mesure. %C
+\paragraph{présence de bruit:} rend difficile la récupération des traces du chiffrement et donc .. %C
+\paragraph{évolutions techniques qui créent des difficultés:} virtualisation~\cite{weiss2012cache}, multi coeurs.  %J
+\paragraph{difficile pour AES sur x86}~\cite{mowery2012aes}  %J
 \begin{itemize}
 \item set d'instruction AES-NI (AES plus dans le cache mais en hard)
 \item caches L1 L2
 \end{itemize}
 + cf "NouvellesArchitectures.txt"
-\paragraph{contre mesures avancées:}  puces crypto dédiées, algos différents.. cf papiers "contre mesures" dans biblio + Implémentation d'AES résistante aux timing attacks~\cite{kasper2009faster}
+\paragraph{contre mesures avancées:}  puces crypto dédiées, algos différents.. cf papiers "contre mesures" dans biblio + Implémentation d'AES résistante aux timing attacks~\cite{kasper2009faster} %J (et à compléter)
 
 \section{Contournements}
-Attaques à l'heure actuelle : mise en place, contournement des contre mesures
+Attaques à l'heure actuelle : mise en place, contournement des contre mesures %TODO
 
 \section*{Conclusion}
+%TODO
 
 \newpage
 \nocite{*}
