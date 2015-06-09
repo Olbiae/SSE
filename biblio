@@ -48,5 +48,7 @@ Faster and Timing-Attack Resistant AES-GCM - Emilia Käsper, Peter Schwabe
 
 A Cache Timing Attack on AES in Virtualization Environments - Michael Weiß, Benedikt Heinz, Frederic Stumpf 
 - payant, creuser pour en trouver d'autres sur la virtualisation
-
+- Attaque implémentée sur ARM Cortex-8
+- Séparation entre trusted domain (crypto) et untrusted domain (OS applicatif).
+  Corruption de l'OS via malware. 
  
