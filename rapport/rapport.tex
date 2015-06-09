@@ -52,17 +52,19 @@ Article Canteaut~\cite{canteaut2006understanding}
 
 \begin{description}
 \item[on récupère] la clé AES
-\item[pourquoi] difficulté d'implémenter algo en temps constant (détailler les raisons)
+\item[pourquoi] difficulté d'implémenter algo en temps constant (détailler les raisons) donc les traces du chiffrement (cache hit/miss) permettent d'en déduire des infos
 \item[comment] détailler~\cite{bernstein2005cache} + (\cite{tromer2010efficient} et~\cite{osvik2006cache}(mêmes auteurs)) + ~\cite{canteaut2006understanding}
-\item[contre mesures] Implémentation d'AES résistante aux timing attacks~\cite{kasper2009faster}
 \end{description}
 
-\section{Difficultés rencontées lors des attaques} %TODO reformuler: juste "contre mesures"?
+\section{Difficultés rencontées lors des attaques} %TODO reformuler: juste "contre mesures"? mais il y a des difficultés "naturelles" et d'autres voulues
 Ça c'est basique mais maintenant:
-\begin{itemize}
-\item[évolutions techniques qui créent des difficultés] virtualisation, multi coeurs
-\item[contre mesures avancées]  puces crypto dédiées, algos différents.. cf papiers "contre mesures" dans biblio
-\end{itemize}
+\begin{description}
+\item[possibilité d'accès en direct au moment du chiffrement?] attaque synchrone/asynchrone~\cite{osvik2006cache}
+\item[mesure du temps:] facile si multithread. Différentes méthodes: statistiques (nécessite de bien connaître l'archi), ou bien on crée un cache hit et on mesure, puis on crée un cache miss et on mesure.
+\item[présence de bruit:] rend difficile la récupération des traces du chiffrement et donc ..
+\item[évolutions techniques qui créent des difficultés:] virtualisation, multi coeurs. 
+\item[contre mesures avancées:]  puces crypto dédiées, algos différents.. cf papiers "contre mesures" dans biblio + Implémentation d'AES résistante aux timing attacks~\cite{kasper2009faster}
+\end{description}
 
 \section{Contournements}
 Attaques à l'heure actuelle : mise en place, contournement des contre mesures
