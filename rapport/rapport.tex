@@ -10,8 +10,8 @@
 \usepackage{fullpage}
 
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
-\newcommand{\reporttitle}{Titre}
-\newcommand{\reportauthor}{Auteurs}
+\newcommand{\reporttitle}{Timing Cache Attack}
+\newcommand{\reportauthor}{Jean BAUDINAT, Chloé MACUR}
 \newcommand{\reportdate}{\today}
 
 \lhead{}
@@ -49,7 +49,23 @@
 "2.1. Memory and Cache Structure"~\cite{tromer2010efficient}\\
 Article Canteaut~\cite{canteaut2006understanding}
 
-\section{Exemple d'attaque: le cas d'AES}
+\section{Fonctionnement de l'attaque}
+
+Nous allons illustrer la \emph{Cache Timing Attack} en expliquant comment ce type d'attaque peut être mise en oeuvre pour casser une implémentation logicielle d'AES. En effet, l'attaque d'AES est l'exemple le plus référencé dans la littérature de ce type d'attaque.
+
+L'attaque d'AES par \emph{Cache Timing Attack} repose sur le stockage en dur des boîtes S dans la mémoire. En effet, à des fins de rapidité, ces boîtes S ne sont pas recalculées en permanence, même si cela pourrait être possible. Elles sont donc stockées en mémoire dans des \emph{Lookup Tables}, et leur utilisation implique leur stockage dans le cache. Les \emph{Lookup Tables} correspondent au valeur des boîtes S correspondant à certaine valeur de clé. Ainsi, l'algorithme peut gagner en rapidité en évitant de charger dans le cache l'intégralité des boîtes S, alors que seule une partie sera utilisée lors du chiffrement. Cependant, ces \emph{Lookup Tables} dépendant de la clé, leur accès donne de l'information à l'attaquant, et lui permet d'exclure certaines valeurs de clé ne nécessitant pas d'accéder aux \emph{Lookup Tables} chargées en mémoire.
+
+
+Les \emph{Timing Cache Attack} sont donc des attaques de type canal auxiliaire se basant sur la mesure du temps d'accès à une donnée, selon qu'elle a déjà été stockée dans le cache ou non. En effet, un \emph{miss} demandera beaucoup plus de temps d'accès qu'un \emph{hitaciiccmez2006trace}. On peut distinguer 3 types d'attaques \cite{aciiccmez2006trace}, respectivement basées sur le temps, les traces ou l'accès mémoire.
+Pour être mises en places, ces attaques supposent que la phase de chiffrement est clairement identifiée. On suppose donc que l'adversaire est en mesure d'identifier un changement de contexte, et donc de ne pas utiliser les mesures touchées par ce phénomène. On suppose de plus que le cache est assez grand pour contenir toutes les informations nécessaires au chiffrement ce qui est le cas de la plupart des processeurs récents.
+L'attaque basée sur le temps (\emph{trace driven attack}) repose sur la mesure aggrégée du temps de chiffrement. Connaissant la plateforme de chiffrement, l'attaquant est alors en mesure de savoir le nombre de \emph{hit} et de \emph{miss} ayant eu lieu lors de l'opération de chiffrement.
+L'attaque basée sur les traces \emph{Trace Driven Attack} est plus précise. L'attaquant peut savoir quand un \emph{hit} ou un \emph{miss} ont lieu.
+Enfin, l'attaque basé sur l'accès \emph{Access Driven Attack} permet de connaître précisément les \emph{lookup tables} auxquelles l'attaquant a pu avoir accès.
+
+\section{Exemple d'attaque: le cas d'AES} 
+
+
+ 
 
 %J
 \begin{description}
