@@ -1,0 +1,128 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[francais]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[pdftex]{graphicx}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{fancyheadings}
+\usepackage{lastpage}
+\usepackage{fullpage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\newcommand{\reporttitle}{Timing Cache Attack}
+\newcommand{\reportauthor}{Jean BAUDINAT, Chloé MACUR}
+\newcommand{\reportdate}{\today}
+
+\lhead{}
+\rhead{\leftmark \rightmark}
+\cfoot{Page \thepage/\pageref{LastPage}}
+
+
+\begin{document}	
+
+\begin{center}
+
+\begin{minipage}[t]{0.4\textwidth}
+  \begin{flushleft} \large
+    \reportauthor
+  \vfill
+  \end{flushleft}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+  \begin{flushright}
+  \includegraphics [width=20mm]{figures/tpt.jpg}
+  \end{flushright}
+\end{minipage}
+\HRule \\[0.4cm]
+{\huge \bfseries \reporttitle}\\[0.1cm]
+\HRule \\
+\end{center}
+
+\section*{Introduction} %TODO
+
+\section{Fonctionnement du cache}
+
+Le but du cache est d'accélérer les calculs du processeurs en outrepassant les facteurs limitants que sont la vitesse d'accès à la mémoire ainsi que la bande passante du bus. Au lieu d'accéder à la mémoire via des \emph{load/store}, on accède à une copie des données située dans une mémoire rapide.
+
+Lorsque les données auxquelles on souhaite accéder sont présentes dans le cache, on y accède directement sans accès mémoire, on parle alors de \emph{cache hit}. Dans le cas d'un \emph{cache miss} (donnée absente du cache) on va donc accéder à la mémoire et mettre à jour le cache.
+  
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=8cm]{figures/cache_associative.png}
+  \caption{Caches associatifs par blocs (\emph{4-way set associative})}
+  \label{cache} 
+\end{figure}
+
+Comme présenté dans la figure \ref{cache}, un cache associatif par blocs est constitué de blocs qui contiennent des lignes. Pour identifier une adresse dans le cache on a donc besoin: d'un index (numéro de ligne à tester), de l'adresse dans la ligne (offset du contenu) et d'une étiquette que l'on va comparer avec le contenu de la ligne. On récupère ainsi la valeur désirée dans le cache. 
+
+Lorsqu'un \emph{cache miss} a lieu et que l'on ajoute un contenu dans le cache, s'il n'existe pas de ligne vide on supprime entièrement celle qui a été utilisée le moins récemment (\emph{Least Recently Used, LRU}). On ne récupère pas uniquement les données demandées, mais un mot de taille fixe qui contient les données adjacentes. On notera ainsi qu'en fonction des paramètres du cache (nombre et taille des blocs, taille des mots) et de l'état initial de celui-ci, les données stockées en cache seront différentes.\\
+
+% On trouve plusieurs niveaux de cache: L1 à L3 (de plus en plus gros et lents). En architecture Harvard, L1 possède un cache d'instruction et un cache de données distincts. %TODO osef? expliquer plus tard quand besoin?
+
+Le principe du cache étant d'accélérer l'accès aux données, l'accès à la mémoire ne se fait pas en temps constant\footnote{Sur un processeur de 2010, un accès au cache L1 se fait en 0.3ns contre 50 à 150ns pour la mémoire principale~\cite{tromer2010efficient}.}. L'utilisation du cache va donc à la fois modifier la latence et la consommation électrique, permettant à un attaquant d'en déduire l'existence de \emph{cache hit} ou de \emph{cache miss} et ainsi repérer des patterns d'accès à la mémoire et apprendre des informations sur le chiffrement.
+
+%TODO réferences? Mon cours d'architecture ..
+
+
+\section{Fonctionnement de l'attaque : l'exemple d'AES}
+
+%TODO trop gros pâté, faire des paragraphes
+Nous allons illustrer la \emph{Cache Timing Attack} en expliquant comment ce type d'attaque peut être mis en \oe uvre pour casser une implémentation logicielle d'AES. En effet, l'attaque d'AES est l'exemple le plus référencé dans la littérature de ce type d'attaque.
+
+L'attaque d'AES par \emph{Cache Timing Attack} repose sur le stockage en dur des boîtes S dans la mémoire. %TODO expliquer boite S
+En effet, à des fins de rapidité, ces boîtes S ne sont pas recalculées en permanence, même si cela pourrait être possible. Elles sont donc stockées en mémoire dans des \emph{Lookup Tables}, et leur utilisation implique leur stockage dans le cache. Les \emph{Lookup Tables} correspondent aux valeurs des boîtes S correspondant à certaines valeurs de clé. Ainsi, l'algorithme peut gagner en rapidité en évitant de charger dans le cache l'intégralité des boîtes S, alors que seule une partie sera utilisée lors du chiffrement. Cependant, ces \emph{Lookup Tables} dépendant de la clé, leur accès donne de l'information à l'attaquant, et lui permet d'exclure certaines valeurs de clé ne nécessitant pas d'accéder aux \emph{Lookup Tables} chargées en mémoire.
+
+
+Les \emph{Timing Cache Attack} sont donc des attaques de type canal auxiliaire se basant sur la mesure du temps d'accès à une donnée, selon qu'elle a déjà été stockée dans le cache ou non. On peut distinguer 3 types d'attaques \cite{aciiccmez2006trace}, respectivement basées sur le temps, les traces ou l'accès mémoire.
+Pour être mises en places, ces attaques supposent que la phase de chiffrement est clairement identifiée. On suppose donc que l'adversaire est en mesure d'identifier un changement de contexte, et donc de ne pas utiliser les mesures touchées par ce phénomène. On suppose de plus que le cache est assez grand pour contenir toutes les informations nécessaires au chiffrement ce qui est le cas de la plupart des processeurs récents.
+L'attaque basée sur le temps (\emph{time driven attack}) repose sur la mesure agrégée du temps de chiffrement. Connaissant la plateforme de chiffrement, l'attaquant est alors en mesure de savoir le nombre de \emph{hit} et de \emph{miss} ayant eu lieu lors de l'opération de chiffrement.
+L'attaque basée sur les traces \emph{Trace Driven Attack} est plus précise. L'attaquant peut savoir quand un \emph{hit} ou un \emph{miss} ont lieu. %TODO pourquoi. Détailler
+Enfin, l'attaque basée sur l'accès \emph{Access Driven Attack} permet de connaître précisément les \emph{lookup tables} auxquelles l'attaquant a pu avoir accès. %TODO détailler
+ 
+\begin{description}
+\item[on récupère] la clé AES
+\item[pourquoi] difficulté d'implémenter algo en temps constant (détailler les raisons) donc les traces du chiffrement (cache hit/miss) permettent d'en déduire des infos
+\item[comment] détailler  ~\cite{canteaut2006understanding} + ~\cite{bernstein2005cache} + (\cite{tromer2010efficient} et~\cite{osvik2006cache}(mêmes auteurs))
+\end{description}
+
+\section{Difficultés rencontées lors des attaques} %TODO reformuler: juste "contre mesures"? mais il y a des difficultés "naturelles" et d'autres voulues
+
+Les résultats obtenus lors de l'attaque dépendent en réalité fortement de l'état initial du cache, de l'architecture considérée ou encore des opportunités qu'à l'attaquant.
+
+\paragraph{état initial du cache} cold miss etc.~\cite{canteaut2006understanding}
+
+\paragraph{possibilité d'accès en direct au moment du chiffrement?} attaque synchrone/asynchrone~\cite{osvik2006cache} %C
+
+\paragraph{mesure du temps:} facile si multithread. Différentes méthodes: statistiques (nécessite de bien connaître l'archi), ou bien on crée un cache hit et on mesure, puis on crée un cache miss et on mesure. %C
+
+\paragraph{présence de bruit:} rend difficile la récupération des traces du chiffrement et donc .. %C
+
+Par ailleurs 'évolution des technologies matérielles, ainsi que la volonté de pallier à ce type d'attaque rendent désormais la \emph{Timing Cache Attack} plus difficile à mettre en \oe uvre.
+
+\paragraph{Une attaque sur \emph{X86} plus difficile} %J
+Mowery~\cite{mowery2012aes} cite des évolutions matérielles rendant plus difficile voir impossible la mise en œuvre de l'attaque d'AES. Parmi celles-ci, on compte notamment le nouveau jeu d'instruction des processeurs Intel : AES-NI. Ce jeu d'instruction permet de traiter matériellement sur un composant dédié du processeur le chiffrement AES. Ainsi, il n'est plus du tout fait usage du cache. Le clair est chargé, et le chiffré est calculé sans aucune autre interaction avec la mémoire ou le cache.
+Cette innovation a été suivie par d'autres fondeurs. Un processeur possédant ce type de composant sera donc virtuellement à l'abri de ce type d'attaque. Cependant, encore faut-il que l'implémentation d'AES utilise le bon jeu d'instructions, ce qui n'est pas toujours le cas.
+
+\paragraph{évolutions techniques qui créent des difficultés:} virtualisation~\cite{weiss2012cache}, multi coeurs.  %J
+\begin{itemize}
+\item set d'instruction AES-NI (AES plus dans le cache mais en hard)
+\item caches L1 L2
+\end{itemize}
++ cf "NouvellesArchitectures.txt"
+
+\paragraph{contre mesures avancées:}  puces crypto dédiées, algos différents.. cf papiers "contre mesures" dans biblio + Implémentation d'AES résistante aux timing attacks~\cite{kasper2009faster} %J (et à compléter)
+
+\section{Contournements}
+Attaques à l'heure actuelle : mise en place, contournement des contre mesures %TODO
+
+\section*{Conclusion}
+%TODO
+
+\newpage
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{ref}
+
+
+\end{document}
