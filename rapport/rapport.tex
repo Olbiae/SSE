@@ -10,8 +10,8 @@
 \usepackage{fullpage}
 
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
-\newcommand{\reporttitle}{Titre}
-\newcommand{\reportauthor}{Auteurs}
+\newcommand{\reporttitle}{Timing Cache Attack}
+\newcommand{\reportauthor}{Jean BAUDINAT, Chloé MACUR}
 \newcommand{\reportdate}{\today}
 
 \lhead{}
@@ -65,7 +65,19 @@ Le principe du cache étant d'accélérer l'accès aux données, l'accès à la 
 %TODO réferences? Mon cours d'architecture ..
 
 
-\section{Exemple d'attaque: le cas d'AES}
+\section{Fonctionnement de l'attaque : l'exemple d'AES}
+
+Nous allons illustrer la \emph{Cache Timing Attack} en expliquant comment ce type d'attaque peut être mise en oeuvre pour casser une implémentation logicielle d'AES. En effet, l'attaque d'AES est l'exemple le plus référencé dans la littérature de ce type d'attaque.
+
+L'attaque d'AES par \emph{Cache Timing Attack} repose sur le stockage en dur des boîtes S dans la mémoire. En effet, à des fins de rapidité, ces boîtes S ne sont pas recalculées en permanence, même si cela pourrait être possible. Elles sont donc stockées en mémoire dans des \emph{Lookup Tables}, et leur utilisation implique leur stockage dans le cache. Les \emph{Lookup Tables} correspondent au valeur des boîtes S correspondant à certaine valeur de clé. Ainsi, l'algorithme peut gagner en rapidité en évitant de charger dans le cache l'intégralité des boîtes S, alors que seule une partie sera utilisée lors du chiffrement. Cependant, ces \emph{Lookup Tables} dépendant de la clé, leur accès donne de l'information à l'attaquant, et lui permet d'exclure certaines valeurs de clé ne nécessitant pas d'accéder aux \emph{Lookup Tables} chargées en mémoire.
+
+
+Les \emph{Timing Cache Attack} sont donc des attaques de type canal auxiliaire se basant sur la mesure du temps d'accès à une donnée, selon qu'elle a déjà été stockée dans le cache ou non. En effet, un \emph{miss} demandera beaucoup plus de temps d'accès qu'un \emph{hitaciiccmez2006trace}. On peut distinguer 3 types d'attaques \cite{aciiccmez2006trace}, respectivement basées sur le temps, les traces ou l'accès mémoire.
+Pour être mises en places, ces attaques supposent que la phase de chiffrement est clairement identifiée. On suppose donc que l'adversaire est en mesure d'identifier un changement de contexte, et donc de ne pas utiliser les mesures touchées par ce phénomène. On suppose de plus que le cache est assez grand pour contenir toutes les informations nécessaires au chiffrement ce qui est le cas de la plupart des processeurs récents.
+L'attaque basée sur le temps (\emph{trace driven attack}) repose sur la mesure agrégée du temps de chiffrement. Connaissant la plateforme de chiffrement, l'attaquant est alors en mesure de savoir le nombre de \emph{hit} et de \emph{miss} ayant eu lieu lors de l'opération de chiffrement.
+L'attaque basée sur les traces \emph{Trace Driven Attack} est plus précise. L'attaquant peut savoir quand un \emph{hit} ou un \emph{miss} ont lieu.
+Enfin, l'attaque basé sur l'accès \emph{Access Driven Attack} permet de connaître précisément les \emph{lookup tables} auxquelles l'attaquant a pu avoir accès.
+ 
 
 %J
 \begin{description}
@@ -77,11 +89,17 @@ Le principe du cache étant d'accélérer l'accès aux données, l'accès à la 
 \section{Difficultés rencontées lors des attaques} %TODO reformuler: juste "contre mesures"? mais il y a des difficultés "naturelles" et d'autres voulues
 Ça c'est basique mais les résultats sont fortement dépendants de: l'état du cache au début, l'architecture considerérée... et:
 
+L'évolution des technologies matérielles, ainsi que la volonté de pallier à ce type d'attaque rendent désormais la \emph{Timing Cache Attack} plus difficile à mettre en  oeuvre.
+
+
+
 \paragraph{possibilité d'accès en direct au moment du chiffrement?} attaque synchrone/asynchrone~\cite{osvik2006cache} %C
 \paragraph{mesure du temps:} facile si multithread. Différentes méthodes: statistiques (nécessite de bien connaître l'archi), ou bien on crée un cache hit et on mesure, puis on crée un cache miss et on mesure. %C
 \paragraph{présence de bruit:} rend difficile la récupération des traces du chiffrement et donc .. %C
+\paragraph{Une attaque sur \emph{X86} plus difficile}~\cite{mowery2012aes}  %J
+\cite{mowery2012aes} cite des évolutions matérielles rendant plus difficile voir impossible la mise en œuvre de l'attaque d'AES. Parmi celles-ci, on compte notamment le nouveau jeu d'instruction des processeurs Intel : AES-NI. Ce jeu d'instruction permet de traiter matériellement sur un composant dédié du processeur le chiffrement AES. Ainsi, il n'est plus du tout fait usage du cache. Le clair est chargé, et le chiffré est calculé sans aucune autre interaction avec la mémoire ou le cache.
+Cette innovation a été suivie par d'autres fondeur. Un processeur possédant ce type de composant sera donc virtuellement à l'abri de ce type d'attaque. Cependant, encore faut-il que l'implémentation d'AES utilise le bon jeu d'instruction, ce qui n'est pas toujours le cas.
 \paragraph{évolutions techniques qui créent des difficultés:} virtualisation~\cite{weiss2012cache}, multi coeurs.  %J
-\paragraph{difficile pour AES sur x86}~\cite{mowery2012aes}  %J
 \begin{itemize}
 \item set d'instruction AES-NI (AES plus dans le cache mais en hard)
 \item caches L1 L2
