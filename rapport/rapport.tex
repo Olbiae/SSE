@@ -79,10 +79,12 @@ L'évolution des technologies matérielles, ainsi que la volonté de pallier à 
 \paragraph{possibilité d'accès en direct au moment du chiffrement?} attaque synchrone/asynchrone~\cite{osvik2006cache} %C
 \paragraph{mesure du temps:} facile si multithread. Différentes méthodes: statistiques (nécessite de bien connaître l'archi), ou bien on crée un cache hit et on mesure, puis on crée un cache miss et on mesure. %C
 \paragraph{présence de bruit:} rend difficile la récupération des traces du chiffrement et donc .. %C
-\paragraph{Une attaque sur \emph{X86} plus difficile}~\cite{mowery2012aes}  %J
+\paragraph{Une attaque sur \emph{X-86} plus difficile}~\cite{mowery2012aes}  %J
 \cite{mowery2012aes} cite des évolutions matérielles rendant plus difficile voir impossible la mise en œuvre de l'attaque d'AES. Parmi celles-ci, on compte notamment le nouveau jeu d'instruction des processeurs Intel : AES-NI. Ce jeu d'instruction permet de traiter matériellement sur un composant dédié du processeur le chiffrement AES. Ainsi, il n'est plus du tout fait usage du cache. Le clair est chargé, et le chiffré est calculé sans aucune autre interaction avec la mémoire ou le cache.
 Cette innovation a été suivie par d'autres fondeur. Un processeur possédant ce type de composant sera donc virtuellement à l'abri de ce type d'attaque. Cependant, encore faut-il que l'implémentation d'AES utilise le bon jeu d'instruction, ce qui n'est pas toujours le cas.
-\paragraph{évolutions techniques qui créent des difficultés:} virtualisation~\cite{weiss2012cache}, multi coeurs.  %J
+\paragraph{Des évolutions technologiques qui compliqent la donne}%J
+Un des changement majeur de l'architecture des processeurs contemporain a été l'apparition des multi-cœur. 
+
 \begin{itemize}
 \item set d'instruction AES-NI (AES plus dans le cache mais en hard)
 \item caches L1 L2
