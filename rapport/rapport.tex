@@ -31,23 +31,39 @@
 \end{minipage}
 \begin{minipage}[t]{0.5\textwidth}
   \begin{flushright}
-  \includegraphics [width=30mm]{figures/tpt.jpg} \\[0.5cm]
+  \includegraphics [width=20mm]{figures/tpt.jpg}
   \end{flushright}
 \end{minipage}
-\HRule \\[0.5cm]
-{\huge \bfseries \reporttitle}\\[0.3cm]
-\HRule \\[1.5cm]
-
+\HRule \\[0.4cm]
+{\huge \bfseries \reporttitle}\\[0.1cm]
+\HRule \\
 \end{center}
 
 \section*{Introduction} %TODO
 
 \section{Fonctionnement du cache}
 
-%C
-"2.1 Data Caches"~\cite{brumley2009cache}\\
-"2.1. Memory and Cache Structure"~\cite{tromer2010efficient}\\
-Article Canteaut~\cite{canteaut2006understanding}
+Le but du cache est d'accélérer les calculs du processeurs en outrepassant les facteurs limitants que sont la vitesse d'accès à la mémoire ainsi que la bande passante du bus. Au lieu d'accéder à la mémoire via des \emph{load/store}, on accède à une copie des données située dans une mémoire rapide.
+
+Lorsque les données auxquelles on souhaite accéder sont présentes dans le cache, on y accède directement sans accès mémoire, on parle alors de \emph{cache hit}. Dans le cas d'un \emph{cache miss} (donnée absente du cache) on va donc accéder à la mémoire et mettre à jour le cache.
+  
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=8cm]{figures/cache_associative.png}
+  \caption{Caches associatifs par blocs (\emph{4-way set associative})}
+  \label{cache} 
+\end{figure}
+
+Comme présenté dans la figure \ref{cache}, un cache associatif par blocs est constitué de blocs qui contiennent des lignes. Pour identifier une adresse dans le cache on a donc besoin: d'un index (numéro de ligne à tester), de l'adresse dans la ligne (offset du contenu) et d'une étiquette que l'on va comparer avec le contenu de la ligne. On récupère ainsi la valeur désirée dans le cache. 
+
+Lorsqu'un \emph{cache miss} a lieu et que l'on ajoute un contenu dans le cache, s'il n'existe pas de ligne vide on supprime entièrement celle qui a été utilisée le moins récemment (\emph{Least Recently Used, LRU}). On ne récupère pas uniquement les données demandées, mais un mot de taille fixe qui contient les données adjacentes. On notera ainsi qu'en fonction des paramètres du cache (nombre et taille des blocs, taille des mots) et de l'état initial de celui-ci, les données stockées en cache seront différentes.\\
+
+% On trouve plusieurs niveaux de cache: L1 à L3 (de plus en plus gros et lents). En architecture Harvard, L1 possède un cache d'instruction et un cache de données distincts. %TODO osef? expliquer plus tard quand besoin?
+
+Le principe du cache étant d'accélérer l'accès aux données, l'accès à la mémoire ne se fait pas en temps constant\footnote{Sur un processeur de 2010, un accès au cache L1 se fait en 0.3ns contre 50 à 150ns pour la mémoire principale~\cite{tromer2010efficient}.}. L'utilisation du cache va donc à la fois modifier la latence et la consommation électrique, permettant à un attaquant d'en déduire l'existence de \emph{cache hit} ou de \emph{cache miss} et ainsi repérer des patterns d'accès à la mémoire et apprendre des informations sur le chiffrement.
+
+%TODO réferences? Mon cours d'architecture ..
+
 
 \section{Exemple d'attaque: le cas d'AES}
 
@@ -59,7 +75,7 @@ Article Canteaut~\cite{canteaut2006understanding}
 \end{description}
 
 \section{Difficultés rencontées lors des attaques} %TODO reformuler: juste "contre mesures"? mais il y a des difficultés "naturelles" et d'autres voulues
-Ça c'est basique mais maintenant:
+Ça c'est basique mais les résultats sont fortement dépendants de: l'état du cache au début, l'architecture considerérée... et:
 
 \paragraph{possibilité d'accès en direct au moment du chiffrement?} attaque synchrone/asynchrone~\cite{osvik2006cache} %C
 \paragraph{mesure du temps:} facile si multithread. Différentes méthodes: statistiques (nécessite de bien connaître l'archi), ou bien on crée un cache hit et on mesure, puis on crée un cache miss et on mesure. %C
