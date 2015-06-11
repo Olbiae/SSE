@@ -89,20 +89,25 @@ Enfin, l'attaque basée sur l'accès \emph{Access Driven Attack} permet de conna
 \item[comment] détailler  ~\cite{canteaut2006understanding} + ~\cite{bernstein2005cache} + (\cite{tromer2010efficient} et~\cite{osvik2006cache}(mêmes auteurs))
 \end{description}
 
+%TODO one round two rounds
+
 \section{Difficultés pour l'attaquant} %TODO reformuler: juste "contre mesures"? mais il y a des difficultés "naturelles" et d'autres voulues
 
 \subsection{Difficultés inhérentes à la méthode}
 
-Les résultats obtenus lors de l'attaque dépendent évidemment de l'architecture considérée, des opportunités qu'a l'attaquant de manipuler le cache, mais également de l'état initial du cache et de la séquence d'accès à la mémoire. Ainsi il est primordial pour l'attaquant de se placer dans des conditions telles qu'il connaisse l'état initial du cache. Il existe principalement trois états initiaux auxquels il peut se ramener~\cite{canteaut2006understanding}:
+Les résultats obtenus lors de l'attaque dépendent évidemment de l'architecture considérée, des opportunités qu'a l'attaquant de manipuler le cache, mais également de l'état initial du cache et de la séquence d'accès à la mémoire. 
+
+Ainsi il est primordial pour l'attaquant de se placer dans des conditions telles qu'il connaisse l'état initial du cache. Il existe principalement trois états initiaux auxquels il peut se ramener~\cite{canteaut2006understanding}:
 \begin{itemize}
 \item le cache ne contient pas de tables utiles pour le chiffrement (cache flush, par exemple en coupant l'alimentation)
 \item le cache est rempli par l'attaquant (nécessite un accès au cache et donc un système multi utilisateurs) 
 \item le cache contient déjà toutes les tables nécessaires au chiffrement. Cette solution devrait permettre un accès en temps constant à toutes les données, rendant l'attaque difficile. En réalité il subsiste des variations de latence lors de l'exécution de l'algorithme, principalement à cause des conflits dus à des accès concurrents. Par ailleurs, la taille du cache, son architecture ou encore la politique de remplacement peuvent donner lieu à l'éviction de certaines données, et ainsi recréer des \emph{cache miss}.
 \end{itemize}
 
-\paragraph{possibilité d'accès en direct au moment du chiffrement?} attaque synchrone/asynchrone~\cite{osvik2006cache} %C 
 
-\paragraph{mesure du temps:} facile si multithread. Différentes méthodes: statistiques (nécessite de bien connaître l'archi), ou bien on crée un cache hit et on mesure, puis on crée un cache miss et on mesure. %C
+On distingue deux types d'attaques selon ce que l'attaquant connaît~\cite{osvik2006cache}. Les attaques dites synchrones supposent que celui-ci peut attaquer en même temps que le chiffrement à lieu et sur le même processeur, lui permettant de connaître des textes clairs. Par exemple un \emph{VPN} (\emph{Virtual Private Network} peut autoriser un utilisateur lambda à envoyer des paquets. L'attaquant envoie alors des demandes de chiffrement forgées de toutes pièces, lui permettant d'obtenir des informations sur la clé. %TODO ça a l'air compliqué les attaques asyncrhones "the attacker will ascertain patterns of memory access performed by other processes just by performing and measuring accesses to its own memory."
+
+\paragraph{mesure du temps:} facile si multithread. Différentes méthodes: statistiques (nécessite de bien connaître l'archi), ou bien on crée un cache hit et on mesure, puis on crée un cache miss et on mesure. %TODO C
 
 \paragraph{présence de bruit:} rend difficile la récupération des traces du chiffrement et donc .. %C
 
@@ -124,7 +129,6 @@ Cette innovation a été suivie par d'autres fondeurs. Un processeur possédant 
 
 L'évolution des technologies actuelles a entraîné l'apparition de deux phénomènes. Tout d'abord, les processeurs sont désormais multicœurs, ce qui leur permet de faire tourner plusieurs processus en même temps. Cette évolution, destinée à accélérer le traitement des données a également des répercussion sur la mise en place de la \emph{Cache Timing Attack}\cite{weiss2012cache}. Dans le cas du processeur quadricœur d'Intel  présenté sur la Figure \ref{etagement} par exemple, chaque cœur possède deux \emph{threads} possédant chacun leur cache L3. Le cœur lui même possède son cache L2. Enfin, l'ensemble du processeur possède un cache L1. Cette multiplication des caches en étage complexifie bien sûr l'attaque, puisqu'elle occasionne plus de bruit dans la mesure des \emph{hit} ou \emph{miss} intéressants, d'autant plus que les caches L3 et L2 sont corrompus par les processus tournant sur les autres cœurs et \emph{threads}.
 Une autre évolution réside dans la virtualisation des tâches, tendant à séparer les processus et les contextes. \cite{weiss2012cache}.
-
 
 \subsection{Contre mesures avancées}
 puces crypto dédiées, algos différents.. cf papiers "contre mesures" dans biblio + Implémentation d'AES résistante aux timing attacks~\cite{kasper2009faster} %J (et à compléter)
