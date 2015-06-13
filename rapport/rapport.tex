@@ -58,8 +58,6 @@ Comme présenté dans la figure \ref{cache}, un cache associatif par blocs est c
 
 Lorsqu'un \emph{cache miss} a lieu et que l'on ajoute un contenu dans le cache, s'il n'existe pas de ligne vide on supprime entièrement celle qui a été utilisée le moins récemment (\emph{Least Recently Used, LRU}). On ne récupère pas uniquement les données demandées, mais un mot de taille fixe qui contient les données adjacentes. On notera ainsi qu'en fonction des paramètres du cache (nombre et taille des blocs, taille des mots) et de l'état initial de celui-ci, les données stockées en cache seront différentes.\\
 
-% On trouve plusieurs niveaux de cache: L1 à L3 (de plus en plus gros et lents). En architecture Harvard, L1 possède un cache d'instruction et un cache de données distincts. %TODO osef? expliquer plus tard quand besoin?
-
 Le principe du cache étant d'accélérer l'accès aux données, l'accès à la mémoire ne se fait pas en temps constant\footnote{Sur un processeur de 2010, un accès au cache L1 se fait en 0.3ns contre 50 à 150ns pour la mémoire principale~\cite{tromer2010efficient}.}. L'utilisation du cache va donc à la fois modifier la latence et la consommation électrique, permettant à un attaquant d'en déduire l'existence de \emph{cache hit} ou de \emph{cache miss} et ainsi repérer des patterns d'accès à la mémoire et apprendre des informations sur le chiffrement.
 
 %TODO réferences? Mon cours d'architecture ..
@@ -67,31 +65,25 @@ Le principe du cache étant d'accélérer l'accès aux données, l'accès à la 
 
 \section{Fonctionnement de l'attaque : l'exemple d'AES}
 
-%TODO trop gros pâté, faire des paragraphes
 \paragraph{Vulnérabilité d'AES}
 Nous allons illustrer la \emph{Cache Timing Attack} en expliquant comment ce type d'attaque peut être mis en œuvre pour casser une implémentation logicielle d'AES. En effet, l'attaque d'AES est l'exemple le plus référencé dans la littérature de ce type d'attaque.
 
-L'attaque d'AES par \emph{Cache Timing Attack} repose sur le stockage en dur des boîtes S dans la mémoire . Ces boîtes S sont utilisées dans l'opération \emph{SubByte} et sont une permutation linéaire de $ GF(256) = GF(2)[x]/(x^8+x^4+x^3+x+1) $ dans lui même. %TODO expliquer boite S
-En effet, à des fins de rapidité, ces boîtes S ne sont pas recalculées en permanence. Elles sont donc stockées en mémoire dans des \emph{Lookup Tables}, et leur utilisation implique leur stockage dans le cache. Les \emph{Lookup Tables} correspondent aux valeurs des boîtes S correspondant à certaines valeurs de clé. Ainsi, l'algorithme peut gagner en rapidité en évitant de charger dans le cache l'intégralité des boîtes S, alors que seule une partie sera utilisée lors du chiffrement. Cependant ces \emph{Lookup Tables} dépendant de la clé, y accéder donne de l'information à l'attaquant et lui permet d'exclure certaines valeurs de clé ne nécessitant pas d'accéder aux \emph{Lookup Tables} chargées en mémoire.
+L'attaque d'AES par \emph{Cache Timing Attack} repose sur le stockage en dur des boîtes S dans la mémoire. Ces boîtes S sont utilisées dans l'opération \emph{SubByte} et sont une permutation linéaire de $ GF(256) = GF(2)[x]/(x^8+x^4+x^3+x+1) $ dans lui même. En effet, à des fins de rapidité, ces boîtes S ne sont pas recalculées en permanence. Elles sont donc stockées en mémoire dans des \emph{Lookup Tables}, et leur utilisation implique leur stockage dans le cache. Les \emph{Lookup Tables} correspondent aux valeurs des boîtes S correspondant à certaines valeurs de clé. Ainsi, l'algorithme peut gagner en rapidité en évitant de charger dans le cache l'intégralité des boîtes S, alors que seule une partie sera utilisée lors du chiffrement. Cependant ces \emph{Lookup Tables} dépendant de la clé, y accéder donne de l'information à l'attaquant et lui permet d'exclure certaines valeurs de clé ne nécessitant pas d'accéder aux \emph{Lookup Tables} chargées en mémoire.
 
 \paragraph{Types d'attaques}
 Les \emph{Timing Cache Attack} sont donc des attaques de type canal auxiliaire se basant sur la mesure du temps d'accès à une donnée, selon qu'elle a déjà été stockée dans le cache ou non. On peut distinguer 3 types d'attaques \cite{aciiccmez2006trace}, respectivement basées sur le temps, les traces ou l'accès mémoire.
-Pour être mises en places, ces attaques supposent que la phase de chiffrement est clairement identifiée. On suppose donc que l'adversaire est en mesure d'identifier un changement de contexte, et donc de ne pas utiliser les mesures touchées par ce phénomène. % je comprends pas cette phrase " ne pas utiliser les mesures touchées par ce phénomène"
+Pour être mises en places, ces attaques supposent que la phase de chiffrement est clairement identifiée. On suppose donc que l'adversaire est en mesure d'identifier un changement de contexte, et donc de ne pas utiliser les mesures touchées par ce phénomène. %TODO je comprends pas cette phrase " ne pas utiliser les mesures touchées par ce phénomène"
 On suppose de plus que le cache est assez grand pour contenir toutes les informations nécessaires au chiffrement, ce qui est le cas de la plupart des processeurs récents.
 
 L'attaque basée sur le temps (\emph{time driven attack}) repose sur la mesure agrégée du temps de chiffrement. Connaissant la plateforme de chiffrement, l'attaquant est alors en mesure de savoir le nombre de \emph{hit} et de \emph{miss} ayant eu lieu lors de l'opération de chiffrement.
 L'attaque basée sur les traces \emph{Trace Driven Attack} est plus précise. L'attaquant peut savoir quand un \emph{hit} ou un \emph{miss} ont lieu. %TODO pourquoi. Détailler
-Enfin, l'attaque basée sur l'accès \emph{Access Driven Attack} permet de connaître précisément les \emph{lookup tables} auxquelles l'attaquant a pu avoir accès. %TODO détailler
+Enfin, l'attaque basée sur l'accès \emph{Access Driven Attack} permet de connaître précisément les \emph{lookup tables} auxquelles l'attaquant a pu avoir accès. %TODO détailler, là on donne juste un nom sans rien expliquer
  
-\begin{description}
-\item[on récupère] la clé AES
-\item[pourquoi] difficulté d'implémenter algo en temps constant (détailler les raisons) donc les traces du chiffrement (cache hit/miss) permettent d'en déduire des infos
-\item[comment] détailler  ~\cite{canteaut2006understanding} + ~\cite{bernstein2005cache} + (\cite{tromer2010efficient} et~\cite{osvik2006cache}(mêmes auteurs))
-\end{description}
-
 %TODO one round two rounds
 
-\section{Difficultés pour l'attaquant} %TODO reformuler: juste "contre mesures"? mais il y a des difficultés "naturelles" et d'autres voulues
+\section{Contre-mesures} %TODO séparer en deux parties, ça n'a aucun sens de parler de "contre-mesures" alors qu'on évoque d'autres attaques un peu plus poussées
+
+La réalisation de ces attaques contre les caches présente en réalité un certain nombre de difficultés pour l'attaquant. On distinguera dans un premier temps les difficultés qui sont inhérentes à la méthode et qui nécessitent une adaptation de la part de l'attaquant. On présentera ensuite des contre-mesures actives implémentées pour rendre l'attaque plus difficile voire impossible à réaliser.
 
 \subsection{Difficultés inhérentes à la méthode}
 
@@ -105,7 +97,10 @@ Ainsi il est primordial pour l'attaquant de se placer dans des conditions telles
 \end{itemize}
 
 
-On distingue deux types d'attaques selon ce que l'attaquant connaît~\cite{osvik2006cache}. Les attaques dites synchrones supposent que celui-ci peut attaquer en même temps que le chiffrement à lieu et sur le même processeur, lui permettant de connaître des textes clairs. Par exemple un \emph{VPN} (\emph{Virtual Private Network} peut autoriser un utilisateur lambda à envoyer des paquets. L'attaquant envoie alors des demandes de chiffrement forgées de toutes pièces, lui permettant d'obtenir des informations sur la clé. %TODO ça a l'air compliqué les attaques asyncrhones "the attacker will ascertain patterns of memory access performed by other processes just by performing and measuring accesses to its own memory."
+On distingue deux types d'attaques selon ce que l'attaquant connaît~\cite{osvik2006cache}. Les attaques dites synchrones supposent que celui-ci peut attaquer en même temps que le chiffrement à lieu et sur le même processeur, lui permettant de connaître des textes clairs. Par exemple un \emph{VPN} (\emph{Virtual Private Network} peut autoriser un utilisateur lambda à envoyer des paquets. L'attaquant envoie alors des demandes de chiffrement forgées de toutes pièces, lui permettant d'obtenir des informations sur la clé. 
+
+Si jamais l'attaquant ne peut pas communiquer avec le processus de chiffrement, il peut tout de même réaliser une attaque dite asynchrone. Ce type d'attaque nécessite une bonne connaissance de l'architecture considérée, mais permet d'obtenir de très bons résultats %TODO En cous d'écriture
+ Les prérequis sont alors de pouvoir exécuter un programme sur le même processeur (sans interaction nécessaire), et que la distribution des textes clairs et chiffrés soit non uniforme. En observant les accès à sa propre mémoire, l'attaquant peut alors identifier des patterns d'accès à la mémoire réalisés par  les autres processus. multithreading.
 
 \paragraph{mesure du temps:} facile si multithread. Différentes méthodes: statistiques (nécessite de bien connaître l'archi), ou bien on crée un cache hit et on mesure, puis on crée un cache miss et on mesure. %TODO C
 
@@ -130,11 +125,12 @@ Cette innovation a été suivie par d'autres fondeurs. Un processeur possédant 
 L'évolution des technologies actuelles a entraîné l'apparition de deux phénomènes. Tout d'abord, les processeurs sont désormais multicœurs, ce qui leur permet de faire tourner plusieurs processus en même temps. Cette évolution, destinée à accélérer le traitement des données a également des répercussion sur la mise en place de la \emph{Cache Timing Attack}\cite{weiss2012cache}. Dans le cas du processeur quadricœur d'Intel  présenté sur la Figure \ref{etagement} par exemple, chaque cœur possède deux \emph{threads} possédant chacun leur cache L3. Le cœur lui même possède son cache L2. Enfin, l'ensemble du processeur possède un cache L1. Cette multiplication des caches en étage complexifie bien sûr l'attaque, puisqu'elle occasionne plus de bruit dans la mesure des \emph{hit} ou \emph{miss} intéressants, d'autant plus que les caches L3 et L2 sont corrompus par les processus tournant sur les autres cœurs et \emph{threads}.
 Une autre évolution réside dans la virtualisation des tâches, tendant à séparer les processus et les contextes. \cite{weiss2012cache}.
 
-\subsection{Contre mesures avancées}
-puces crypto dédiées, algos différents.. cf papiers "contre mesures" dans biblio + Implémentation d'AES résistante aux timing attacks~\cite{kasper2009faster} %J (et à compléter)
+\subsection{Contre-mesures avancées}
+Tentatives d'implémenter algo en temps constant 
+puces crypto dédiées, algos différents.. cf papiers "contre-mesures" dans biblio + Implémentation d'AES résistante aux timing attacks~\cite{kasper2009faster} %J (et à compléter)
 
 \section{Contournements}
-Attaques à l'heure actuelle : mise en place, contournement des contre mesures %TODO
+Attaques à l'heure actuelle : mise en place, contournement des contre-mesures %TODO
 
 \section*{Conclusion}
 %TODO
