@@ -43,7 +43,8 @@
 \section[Fonctionnement du cache]{Fonctionnement du cache}
 
 \begin{frame}{Fonctionnement du cache}
-TODO
+But: accélérer les calculs (\emph{cache hit}/\emph{cache miss})
+
 \begin{figure}[h]
   \centering
   \includegraphics[width=7.5cm]{figures/cache_associative.png}
@@ -93,35 +94,52 @@ TODO
 
 \subsection{État initial du cache}
 \begin{frame}{État initial du cache}
-	Pour mener l'attaque, l'attaquant doit ramener le cache dans l'un des états suivants
-	\begin{itemize}
-		\item Cache vide de toute \emph{Lookup Table}
-		\item Cache rempli par l'attaquant
-		\item Cache contenant toutes les \emph{Lookup Tables}		
-	\end{itemize}
-	Difficile de se ramener à l'un de ces états, source de bruit
-	
+Le cache~\cite{canteaut2006understanding}:
+\begin{itemize}
+\item Ne contient pas de tables utiles pour le chiffrement (cache flush, par exemple en coupant l'alimentation)
+\item Est rempli par l'attaquant (nécessite un accès au cache et donc un système multi-utilisateurs) 
+\item Contient déjà toutes les tables nécessaires au chiffrement (temps constant)
+\end{itemize}
 \end{frame}
 
 \subsection{Attaques synchrones et asynchrones}
-\begin{frame}{Attaques synchrones et asynchrones}
-TODO \emph{Cache Timing Attack} 
+\begin{frame}{Attaques synchrones et asynchrones~\cite{osvik2006cache}}
+
+
+\begin{description}
+\item [attaques synchrones]~\\ 
+\begin{itemize}
+\item attaque en même temps que le chiffrement
+\item forge des requêtes de chiffrement (ex: VPN)
+\end{itemize}
+\item [attaques asynchrones] ~\\
+\begin{itemize}
+\item bonne connaissance de l'architecture considérée
+\item très bons résultats
+\item identifier des patterns d'accès à la mémoire réalisés par les autres processus
+\item comparaison des statistiques d'utilisation
+\end{itemize}
+\end{description}
+
 \end{frame}
 
 \subsection{Mesure du temps}
-\begin{frame}{Mesure du temps}
-	Comment l'attaquant peut-il mesurer le temps?	
-	\begin{itemize}
-		\item Modifier cache avant chiffrement
-		\begin{itemize}
-			\item Mesure d'un premier chiffrement, puis du même chiffrement dans la foulée, le cache restant le même
-		\end{itemize}			
-		\item Regarder état cache après chiffrement
-		\begin{itemize}
-			\item Remplir cache avant chiffrement puis observer différence à l'issue
-		\end{itemize}	
-		\item Cache contenant toutes les \emph{Lookup Tables}		
-	\end{itemize}
+\begin{frame}{Mesure du temps~\cite{osvik2006cache}}
+
+\begin{description}
+\item [Evict + Time]  ~\\
+\begin{itemize}
+\item Chiffrement d'un texte clair
+\item Eviction du cache en accédant à d'autres données en mémoire
+\item Ssecond chiffrement du même texte clair et mesure du temps
+\end{itemize}
+\item [Prime + Probe]  ~\\
+\begin{itemize}
+\item remplissage cache avec données connues
+\item chiffrement d'un texte clair
+\item lecture des adresses mémoires et mesure du temps
+\end{itemize}
+\end{description}
 \end{frame}
 
 \section{Contre-mesures}
@@ -148,15 +166,39 @@ TODO \emph{Cache Timing Attack}
 
 \subsection{Implémentation d'un algorithme en temps constant: le cas d'AES}
 \begin{frame}{Implémentation d'un algorithme en temps constant: le cas d'AES}
-TODO \emph{Cache Timing Attack} essai~\cite{canteaut2006understanding}
+\begin{itemize}
+\item Remplacer les instructions conditionnelles par des séquences d'instruction déterministes~\cite{kasper2009faster}
+\item Désactiver le multithreading pour empêcher mesures logicielles
+\item Désactiver le cache (ou \emph{no-fill})
+\end{itemize}
+
+\begin{description}
+\item [Problème:] si on n'utilise pas les boîtes~S ou le cache, mauvaises performances
+\item [Solution:] conserver les boîtes~S dans le cache à tout moment
+\end{description}
 \end{frame}
+
+\begin{frame}{Implémentation d'un algorithme en temps constant: le cas d'AES}
+\begin{description}
+\item [Méthodes:]~\\
+\begin{itemize}
+\item Ajout d'une instruction qui charge une table en un nombre constant de cycles~\cite{bernstein2005cache}
+\item Matériel cryptographique adjacent en mémoire
+\item Éviter interruptions au niveau noyau
+\end{itemize}
+\item[Autres solutions:] ajout de bruit (chiffrement inutile en parallèle)
+\end{description}
+\end{frame}
+
 
 \section*{Conclusion et  références}
 \frame[allowframebreaks]{
 
-\begin{block}<+->{Perspectives}
-lala. 
-\alert{conclu} bla
+\begin{block}<+->{Conclusion}
+\begin{itemize}
+\item Contre-mesures difficiles à réaliser sans \alert{baisse de performance}
+\item Utilisation d'une puce cryptographique
+\end{itemize}
 \end{block}
 \vspace{1cm}
 \bibliographystyle{plain}
