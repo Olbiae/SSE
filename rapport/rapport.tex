@@ -90,7 +90,7 @@ Selon le modèle d'attaquant, on voit donc que pour se prémunir face à une \em
 La réalisation de ces attaques contre les caches présente en réalité un certain nombre de difficultés pour l'attaquant. On présente ici les difficultés qui sont inhérentes à la méthode et qui nécessitent une adaptation de la part de l'attaquant. Ainsi, les résultats obtenus lors de l'attaque dépendent évidemment de l'architecture considérée, des opportunités qu'a l'attaquant de manipuler le cache, mais également de l'état initial du cache et de la séquence d'accès à la mémoire. 
 
 \paragraph{État initial du cache} ~\\ 
-Ainsi il est primordial pour l'attaquant de se placer dans des conditions telles qu'il connaisse l'état initial du cache. Il existe principalement trois états initiaux auxquels il peut se ramener~\cite{canteaut2006understanding}:
+Il est primordial pour l'attaquant de se placer dans des conditions telles qu'il connaisse l'état initial du cache. Il existe principalement trois états initiaux auxquels il peut se ramener~\cite{canteaut2006understanding}:
 \begin{itemize}
 \item le cache ne contient pas de tables utiles pour le chiffrement (cache flush, par exemple en coupant l'alimentation)
 \item le cache est rempli par l'attaquant (nécessite un accès au cache et donc un système multi-utilisateurs) 
@@ -106,9 +106,6 @@ Si jamais l'attaquant ne peut pas communiquer avec le processus de chiffrement e
 Une difficulté primordiale de cette méthode est de pouvoir mesurer le temps d'accès aux données. Une première méthode~\cite{osvik2006cache} consiste à modifier l'état du cache avant chaque chiffrement. Dans un premier temps on réalise un chiffrement d'un texte clair, ce qui permet de s'assurer que les données désirées sont dans le cache. Puis on les évince du cache en accédant à d'autres données en mémoire, avec une associativité telle que ces nouvelles données remplacent le contenu précédent du cache. On réalise ensuite un second chiffrement du même texte clair et on mesure le temps pris. Selon si les données doivent être remises dans le cache ou non, on mesure un temps différent, et on a donc accès à la différence de temps entre un \emph{cache hit} et un \emph{cache miss}.
 
 Une autre mesure consiste à regarder l'état du cache après l'étape de chiffrement. Pour ce faire l'attaquant remplit d'abord le cache avec des données connues, puis déclenche le chiffrement d'un texte clair, ce qui va évincer une partie des données du cache. Il va ensuite lire toutes les adresses mémoires qu'il avait mises dans le cache et mesurer le temps que ça prend. Si le processus de chiffrement n'a pas accédé à certains sets de cache, l'accès donnera lieu à un \emph{cache hit}, et on aura un \emph{cache miss} dans le cas contraire, ce qui donne bien une différence lors de la mesure du temps. L'avantage de cette méthode par rapport à la précédente est qu'elle permet de mesurer tout à la fin et en un seul coup, elle est donc beaucoup moins sujette à des variations de temps et donc plus précise.
-
-\paragraph{présence de bruit}~\\
-Rend difficile la récupération des traces du chiffrement et donc .. %TODO C
 
 \section{Contre-mesures}
 
@@ -130,7 +127,7 @@ L'évolution des technologies actuelles a entraîné l'apparition de deux phéno
 Une autre évolution réside dans la virtualisation des tâches, tendant à séparer les processus et les contextes. \cite{weiss2012cache}. Cependant, l'attaque exploitant les caches est dans ces cas une des seules qui puisse être mise en oeuvre depuis un environnement non sécurisé vers un environnement sécurisé. C'est par exemple le cas sur les environnement de type téléphone mobile, où l'OS et l'environnement sécurisé effectuant les opérations de cryptographie sont séparés par de la virtualisation. Cependant, un attaquant corrompant l'OS (à l'aide d'un cheval de Troie par exemple) pourra par la suite mener une \emph{Cache Timing Attack} contre l'environnement sécurisé, le cache étant partagé malgré la virtualisation.
 
 \paragraph{Implémentation d'un algorithme en temps constant: le cas d'AES} ~\\
-Puisque la mesure du temps d'accès aux données permet d'obtenir des informations sur la clé de chiffrement, une solution pour pallier à cette exploitation serait d'implémenter un algorithme AES en temps constant\footnote{"En temps constant" signifie indépendant de la clé AES et du texte clair.}. Il est possible d'écrire de tels algorithmes qui n'utilisent pas les boîtes S. On pourrait également ajouter une boucle de durée d'exécution connue qui tourne jusqu'à atteindre le pire temps d'exécution connu. Toutefois, le temps d'exécution est beaucoup trop élevé, attendu que ne pas faire une opération est instantané et que le cache est plus rapide que la DRAM.
+Puisque la mesure du temps d'accès aux données permet d'obtenir des informations sur la clé de chiffrement, une solution pour pallier à cette exploitation serait d'implémenter un algorithme AES en temps constant\footnote{"En temps constant" signifie indépendant de la clé AES et du texte clair.}. Il est possible d'écrire de tels algorithmes qui n'utilisent pas les boîtes S\footnote{On pourrait également ajouter une boucle de durée d'exécution connue qui tourne jusqu'à atteindre le pire temps d'exécution connu.}. Toutefois, le temps d'exécution est beaucoup trop élevé, attendu que ne pas faire une opération est instantané et que le cache est plus rapide que la DRAM.
 On souhaiterait alors s'assurer que les boîtes S sont dans le cache pendant toute la durée du chiffrement.
 
 Une solution proposée par Bernstein~\cite{bernstein2005cache} est d'ajouter une instruction aux CPU qui s'assurerait que toutes les tables sont bien dans le cache L1, et qui pourrait charger une table en un nombre constant de cycles. On peut imaginer que l'instruction utilise un bit pour se souvenir que l'ensemble de la table est dans le cache L1, évitant ainsi de vérifier la fois suivante, auquel cas on conserve la rapidité spécifique au cache. Si jamais des registres sont modifiés ou bien une ligne évincée du cache, le bit est réinitialisé, mais le chargement de la table se fait en temps constant quelles que soient les lignes manquantes.
@@ -141,15 +138,18 @@ Pour pallier aux interruptions du code, durant lesquelles les boîtes S peuvent 
 
 %Par ailleurs, d'autres conflits peuvent faire obstacle à l'exécution en temps constant: l'existence de conflit entre \emph{load} et \emph{store}, ou encore des conflits entre \emph{load} de différentes banques de cache. -> décalages savants en mémoire, modulo truc d'instructions
 
-%TODO C en cours
 Par ailleurs, Käsper~\cite{kasper2009faster} présente une implémentation de DES en temps constant qui remplace les instructions conditionnelles par des séquences d'instruction déterministes, afin d'éviter toute fuite d'information.
+
+Une autre approche~\cite{osvik2006cache} consiste à ajouter du bruit en réalisant en parallèle le chiffrement d'un texte inutile. Il faut noter que cette technique oblige simplement l'attaquant à utiliser davantage d'échantillons, mais ne rend pas l'attaque impossible pour autant.
+
+%TODO osvik: soit désactiver le cache, soit mode nofill
 
 \paragraph{Autres contres-mesures}
 - puces crypto dédiées, algos différents.. cf papiers "contre-mesures" dans biblio %TODO J (et à compléter) 
 
 
 \section*{Conclusion}
-%TODO
+L'utilisation des caches fournit des temps d'accès aux données variables, permettant à un attaquant d'obtenir des informations sur le matériel cryptographique. Un certain nombre de techniques visant à empêcher cette attaque ne font que la rendre plus difficile, et sont grandement dépendantes de l'architecture considérée. Par ailleurs, si l'implémentation d'algorithmes en temps constant permet en théorie d'empêcher l'attaque, ils sont en pratique difficiles à réaliser et ne présentent pas des temps d'exécution satisfaisants. %TODO finir La solution à la fois efficace et indépendante de architecture 
 
 %TODO List
 %- Virtualisation
