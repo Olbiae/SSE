@@ -72,12 +72,16 @@ L'attaque d'AES par \emph{Cache Timing Attack} repose sur le stockage en dur des
 
 \paragraph{Types d'attaques}
 Les \emph{Timing Cache Attack} sont donc des attaques de type canal auxiliaire se basant sur la mesure du temps d'accès à une donnée, selon qu'elle a déjà été stockée dans le cache ou non. On peut distinguer 3 types d'attaques \cite{aciiccmez2006trace}, respectivement basées sur le temps, les traces ou l'accès mémoire.
-Pour être mises en places, ces attaques supposent que la phase de chiffrement est clairement identifiée. On suppose donc que l'adversaire est en mesure d'identifier un changement de contexte, et donc de ne pas utiliser les mesures touchées par ce phénomène. %TODO je comprends pas cette phrase " ne pas utiliser les mesures touchées par ce phénomène"
+Pour être mises en places, ces attaques supposent que la phase de chiffrement est clairement identifiée. On suppose donc que l'adversaire est en mesure d'identifier un changement de contexte, et donc de ne pas utiliser les mesures touchées par ce phénomène. En effet, tout changement de contexte sur le processeur ou se déroule le calcul cryptographique va corrompre le cache, et donc la mesure du temps d'accès.
 On suppose de plus que le cache est assez grand pour contenir toutes les informations nécessaires au chiffrement, ce qui est le cas de la plupart des processeurs récents.
 
+% On parle de modèle d'attaquant, pas de la mise en place précise de l'attaque.
+On peut alors se donner 3 modèles d'attaquant, selon les informations de temps d'accès auxquelles l'attaquant peut avoir accès.
 L'attaque basée sur le temps (\emph{time driven attack}) repose sur la mesure agrégée du temps de chiffrement. Connaissant la plateforme de chiffrement, l'attaquant est alors en mesure de savoir le nombre de \emph{hit} et de \emph{miss} ayant eu lieu lors de l'opération de chiffrement.
-L'attaque basée sur les traces \emph{Trace Driven Attack} est plus précise. L'attaquant peut savoir quand un \emph{hit} ou un \emph{miss} ont lieu. %TODO pourquoi. Détailler
-Enfin, l'attaque basée sur l'accès \emph{Access Driven Attack} permet de connaître précisément les \emph{lookup tables} auxquelles l'attaquant a pu avoir accès. %TODO détailler, là on donne juste un nom sans rien expliquer
+L'attaque basée sur les traces \emph{Trace Driven Attack} est plus précise. L'attaquant peut savoir quand un \emph{hit} ou un \emph{miss} ont lieu. Ce type d'attaque permet donc d'affiner les prédictions sur le type de \emph{Lookup Tables} utilisées.
+Enfin, l'attaque basée sur l'accès \emph{Access Driven Attack} suppose que l'attaquant connaît précisément les \emph{lookup tables} auxquelles l'attaquant a pu avoir accès.
+Selon le modèle d'attaquant, on voit donc que pour se prémunir face à une \emph{Cache Timing Attack}, le fondeur devra utilliser des méthodes plus ou moins perfectionnées en fonction des moyens de l'attaquant.
+
  
 %TODO one round two rounds
 
@@ -94,7 +98,7 @@ Les résultats obtenus lors de l'attaque dépendent évidemment de l'architectur
 Ainsi il est primordial pour l'attaquant de se placer dans des conditions telles qu'il connaisse l'état initial du cache. Il existe principalement trois états initiaux auxquels il peut se ramener~\cite{canteaut2006understanding}:
 \begin{itemize}
 \item le cache ne contient pas de tables utiles pour le chiffrement (cache flush, par exemple en coupant l'alimentation)
-\item le cache est rempli par l'attaquant (nécessite un accès au cache et donc un système multi utilisateurs) 
+\item le cache est rempli par l'attaquant (nécessite un accès au cache et donc un système multi-utilisateurs) 
 \item le cache contient déjà toutes les tables nécessaires au chiffrement. Cette solution devrait permettre un accès en temps constant à toutes les données, rendant l'attaque difficile. En réalité il subsiste des variations de latence lors de l'exécution de l'algorithme, principalement à cause des conflits dus à des accès concurrents. Par ailleurs, la taille du cache, son architecture ou encore la politique de remplacement peuvent donner lieu à l'éviction de certaines données, et ainsi recréer des \emph{cache miss}.
 \end{itemize}
 
