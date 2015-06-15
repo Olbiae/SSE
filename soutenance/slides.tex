@@ -69,9 +69,24 @@ TODO
 	\end{itemize}
 \end{frame}
 
-\subsection{Types d'attaques}
-\begin{frame}{Types d'attaques}
-TODO \emph{Cache Timing Attack} 
+\subsection{Modèle d'attaquant}
+\begin{frame}{Modèle d'attaquant}
+	\begin{itemize}
+		\item \emph{Time Driven Attack}
+			\begin{itemize}
+				\item Mesure du temps total d'accès au cache
+			\end{itemize}
+		\item \emph{Trace Driven Attack}
+			\begin{itemize}
+				\item Connaissance de l'ensemble de la séquence \emph{hit/miss}
+			\end{itemize}
+		\item \emph{Access Driven Attack}
+			\begin{itemize}
+				\item Connaissance des lignes de caches accédées
+			\end{itemize}
+	\end{itemize}
+	
+	
 \end{frame}
 
 \section{Mise en place concrète de l'attaque}
@@ -95,15 +110,19 @@ TODO \emph{Cache Timing Attack}
 
 \subsection{Une attaque sur x86 plus difficile}
 \begin{frame}{Une attaque sur x86 plus difficile}
-TODO \emph{Cache Timing Attack} 
+	\begin{itemize}
+		\item x86 : Architecture parmi les plus répandues
+		\item 2010 : Intel crée nouveau jeu d'instruction : AES-NI
+		\item Rend totalement impossible attaque
+		\item Encore faut-il utiliser ces nouvelles instructions
+	\end{itemize}
 \end{frame}
 
 \subsection{Une évolution des technologies créatrice de difficultés supplémentaires}
 \begin{frame}{Une évolution des technologies créatrice de difficultés supplémentaires}
-TODO \emph{Cache Timing Attack} 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=8cm]{figures/BDArch.png}
+  \includegraphics[width=11cm]{figures/BDArch.png}
   \caption{Étagement des caches dans un processeur quadricoeur}
   \label{etagement} 
 \end{figure}
