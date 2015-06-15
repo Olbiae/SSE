@@ -143,18 +143,18 @@ Par ailleurs, Käsper~\cite{kasper2009faster} présente une implémentation de D
 
 Une autre approche~\cite{osvik2006cache} consiste à ajouter du bruit en réalisant en parallèle le chiffrement d'un texte inutile. Il faut noter que cette technique oblige simplement l'attaquant à utiliser davantage d'échantillons, mais ne rend pas l'attaque impossible pour autant.
 
-%TODO osvik: soit désactiver le cache, soit mode nofill
+%TODO osvik: soit désactiver le cache, soit mode nofill : fait.
 
-\paragraph{Autres contres-mesures}
+\paragraph{Autres contres-mesures} ~\\
 \cite{kasper2009faster} cite également de nombreuse méthodes alternatives, permettant de se prémunir face à ce type d'attaques. Cependant, ces contre-mesures impliquent souvent une grande perte de performance, et offrent parfois peu de protection.
 Tout d'abord, pour se prémunir face à certaines attaques logicielles, il peut être intéressant de désactiver le multithreading. En allouant un cœur à l'opération de chiffrement, et en interdisant à d'autres processus de s'exécuter, on empêche ainsi les mesures logicielles sur les caches L1 et L2. L'attaque devient ainsi plus difficile.
-Il est également possible dans certaines architectures (Intel Ceon, certains processeurs ARM, ...) de totalement désactiver l'utilisation du lors du chiffrement. Cette opération ne peut se faire qu'en mode noyaux et est donc effectuée par l'OS. Cependant, ce type de solution est assez radical et se traduit par un coup assez élevé dans le temps d'exécution.
+Il est également possible dans certaines architectures (Intel Xeon, certains processeurs ARM, ...) de totalement désactiver l'utilisation du lors du chiffrement. Cette opération ne peut se faire qu'en mode noyaux et est donc effectuée par l'OS. Cependant, ce type de solution est assez radical et se traduit par un coup assez élevé dans le temps d'exécution.
 D'autres méthodes existent, comme normaliser le cache, c'est à dire garder en permanence l'ensemble des \emph{Lookup Tables} stockées, mais si elle permettent de se prémunir face aux attaque de premier ordre, elle ne résistent pas longtemps face à une analyse statistique plus fouillée.
 
 
 \section*{Conclusion}
 L'utilisation des caches fournit des temps d'accès aux données variables, permettant à un attaquant d'obtenir des informations sur le matériel cryptographique. Un certain nombre de techniques visant à empêcher cette attaque ne font que la rendre plus difficile, et sont grandement dépendantes de l'architecture considérée. Par ailleurs, si l'implémentation d'algorithmes en temps constant permet en théorie d'empêcher l'attaque, ils sont en pratique difficiles à réaliser et ne présentent pas des temps d'exécution satisfaisants. La seule solution pleinement satisfaisante actuellement permettant de se prémunir face à ce type d'attaque auxiliaire semble donc être l'implémentation d'une puce cryptographique effectuant le calcul, et évitant ainsi l'usage de cache. Cependant, cette solution est coûteuse, et suppose l'usage exclusif de l'algorithme qu'elle supporte. 
- %TODO finir La solution à la fois efficace et indépendante de architecture 
+ %TODO finir La solution à la fois efficace et indépendante de architecture (ie?)
 Cependant, même en réussissant à se prémunir face à l'usage des caches comme canal auxiliaire, d'autres composants du processeur peuvent avoir une incidence sur la sécurité des algorithmes de chiffrement, comme les composant de branchement prédictif par exemple.
 
 \newpage
