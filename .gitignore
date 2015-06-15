@@ -1,8 +1,10 @@
 *.aux
+*.dvi
 *.out
 *.log
 *.blg
 *.synctex.gz
 *.bbl
+*~
 rapport/rapport.pdf
 /docs
