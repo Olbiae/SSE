@@ -141,8 +141,8 @@ Pour pallier aux interruptions du code, durant lesquelles les boîtes S peuvent 
 
 %Par ailleurs, d'autres conflits peuvent faire obstacle à l'exécution en temps constant: l'existence de conflit entre \emph{load} et \emph{store}, ou encore des conflits entre \emph{load} de différentes banques de cache. -> décalages savants en mémoire, modulo truc d'instructions
 
-
-Implémentation d'AES résistante aux timing attacks~\cite{kasper2009faster} %TODO C en cours
+%TODO C en cours
+Par ailleurs, Käsper~\cite{kasper2009faster} présente une implémentation de DES en temps constant qui remplace les instructions conditionnelles par des séquences d'instruction déterministes, afin d'éviter toute fuite d'information.
 
 \paragraph{Autres contres-mesures}
 - puces crypto dédiées, algos différents.. cf papiers "contre-mesures" dans biblio %TODO J (et à compléter) 
