@@ -48,9 +48,6 @@ Lorsqu'un \emph{cache miss} a lieu et que l'on ajoute un contenu dans le cache, 
 
 Le principe du cache étant d'accélérer l'accès aux données, l'accès à la mémoire ne se fait pas en temps constant\footnote{Sur un processeur de 2010, un accès au cache L1 se fait en 0.3ns contre 50 à 150ns pour la mémoire principale~\cite{tromer2010efficient}.}. L'utilisation du cache va donc à la fois modifier la latence et la consommation électrique, permettant à un attaquant d'en déduire l'existence de \emph{cache hit} ou de \emph{cache miss} et ainsi repérer des patterns d'accès à la mémoire et apprendre des informations sur le chiffrement.
 
-%TODO réferences? Mon cours d'architecture ..
-
-
 \section{Fonctionnement de l'attaque : l'exemple d'AES}
 
 \paragraph{Vulnérabilité d'AES}~\\

@@ -5,6 +5,10 @@
 *.blg
 *.synctex.gz
 *.bbl
+*.nav
+*.snm
+*.toc
 *~
+soutenance/slides.pdf
 rapport/rapport.pdf
 /docs
