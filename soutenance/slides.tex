@@ -91,9 +91,16 @@ TODO
 
 \section{Mise en place concrète de l'attaque}
 
-\subsection{État initial du cache} 
+\subsection{État initial du cache}
 \begin{frame}{État initial du cache}
-TODO \emph{Cache Timing Attack} 
+	Pour mener l'attaque, l'attaquant doit ramener le cache dans l'un des états suivants
+	\begin{itemize}
+		\item Cache vide de toute \emph{Lookup Table}
+		\item Cache rempli par l'attaquant
+		\item Cache contenant toutes les \emph{Lookup Tables}		
+	\end{itemize}
+	Difficile de se ramener à l'un de ces états, source de bruit
+	
 \end{frame}
 
 \subsection{Attaques synchrones et asynchrones}
@@ -103,7 +110,18 @@ TODO \emph{Cache Timing Attack}
 
 \subsection{Mesure du temps}
 \begin{frame}{Mesure du temps}
-TODO \emph{Cache Timing Attack} 
+	Comment l'attaquant peut-il mesurer le temps?	
+	\begin{itemize}
+		\item Modifier cache avant chiffrement
+		\begin{itemize}
+			\item Mesure d'un premier chiffrement, puis du même chiffrement dans la foulée, le cache restant le même
+		\end{itemize}			
+		\item Regarder état cache après chiffrement
+		\begin{itemize}
+			\item Remplir cache avant chiffrement puis observer différence à l'issue
+		\end{itemize}	
+		\item Cache contenant toutes les \emph{Lookup Tables}		
+	\end{itemize}
 \end{frame}
 
 \section{Contre-mesures}
