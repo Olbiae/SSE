@@ -153,15 +153,9 @@ D'autres méthodes existent, comme normaliser le cache, c'est à dire garder en 
 
 
 \section*{Conclusion}
-L'utilisation des caches fournit des temps d'accès aux données variables, permettant à un attaquant d'obtenir des informations sur le matériel cryptographique. Un certain nombre de techniques visant à empêcher cette attaque ne font que la rendre plus difficile, et sont grandement dépendantes de l'architecture considérée. Par ailleurs, si l'implémentation d'algorithmes en temps constant permet en théorie d'empêcher l'attaque, ils sont en pratique difficiles à réaliser et ne présentent pas des temps d'exécution satisfaisants. %TODO finir La solution à la fois efficace et indépendante de architecture 
-
-%TODO List
-%- Virtualisation
-%- ARM
-%- Attaques sur x86 et nouvelles architectures
-%- RSA?
-- Ouverture : autres attaques sur composant d'architecture processeur (ex :
-  composant de branchement predictif)
+L'utilisation des caches fournit des temps d'accès aux données variables, permettant à un attaquant d'obtenir des informations sur le matériel cryptographique. Un certain nombre de techniques visant à empêcher cette attaque ne font que la rendre plus difficile, et sont grandement dépendantes de l'architecture considérée. Par ailleurs, si l'implémentation d'algorithmes en temps constant permet en théorie d'empêcher l'attaque, ils sont en pratique difficiles à réaliser et ne présentent pas des temps d'exécution satisfaisants. La seule solution pleinement satisfaisante actuellement permettant de se prémunir face à ce type d'attaque auxiliaire semble donc être l'implémentation d'une puce cryptographique effectuant le calcul, et évitant ainsi l'usage de cache. Cependant, cette solution est coûteuse, et suppose l'usage exclusif de l'algorithme qu'elle supporte. 
+ %TODO finir La solution à la fois efficace et indépendante de architecture 
+Cependant, même en réussissant à se prémunir face à l'usage des caches comme canal auxiliaire, d'autres composants du processeur peuvent avoir une incidence sur la sécurité des algorithmes de chiffrement, comme les composant de branchement prédictif par exemple.
 
 \newpage
 \nocite{*}
