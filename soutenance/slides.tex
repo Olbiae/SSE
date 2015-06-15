@@ -56,7 +56,17 @@ TODO
 
 \subsection{Vulnérabilité d'AES}
 \begin{frame}{Vulnérabilité d'AES}
-TODO \emph{Cache Timing Attack} 
+\begin{figure}[h]
+  		\centering
+  		\includegraphics[width=5cm]{figures/s_box.jpg}
+  		\caption{S-Box utilisée lors de l'opération SubByte}
+  		\label{sbox} 
+	\end{figure}
+	\begin{itemize}
+		\item Boîtes S implémentées sous forme de \emph{Lookup Tables}
+		\item Implique différence de temps d'accès selon \emph{Lookup Table} en cache ou non
+		\item Différences mesurables
+	\end{itemize}
 \end{frame}
 
 \subsection{Types d'attaques}
