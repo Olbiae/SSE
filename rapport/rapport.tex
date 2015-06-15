@@ -80,16 +80,18 @@ On peut alors se donner 3 modèles d'attaquant, selon les informations de temps 
 L'attaque basée sur le temps (\emph{time driven attack}) repose sur la mesure agrégée du temps de chiffrement. Connaissant la plateforme de chiffrement, l'attaquant est alors en mesure de savoir le nombre de \emph{hit} et de \emph{miss} ayant eu lieu lors de l'opération de chiffrement.
 L'attaque basée sur les traces \emph{Trace Driven Attack} est plus précise. L'attaquant peut savoir quand un \emph{hit} ou un \emph{miss} ont lieu. Ce type d'attaque permet donc d'affiner les prédictions sur le type de \emph{Lookup Tables} utilisées.
 Enfin, l'attaque basée sur l'accès \emph{Access Driven Attack} suppose que l'attaquant connaît précisément les \emph{lookup tables} auxquelles l'attaquant a pu avoir accès.
-Selon le modèle d'attaquant, on voit donc que pour se prémunir face à une \emph{Cache Timing Attack}, le fondeur devra utilliser des méthodes plus ou moins perfectionnées en fonction des moyens de l'attaquant.
+Selon le modèle d'attaquant, on voit donc que pour se prémunir face à une \emph{Cache Timing Attack}, le fondeur devra utiliser des méthodes plus ou moins perfectionnées en fonction des moyens de l'attaquant.
 
  
 %TODO one round two rounds
 
+\section{Mise en place concrète de l'attaque} %TODO séparer en deux parties, ça n'a aucun sens de parler de "contre-mesures" alors qu'on évoque d'autres attaques un peu plus poussées
 
+La réalisation de ces attaques contre les caches présente en réalité un certain nombre de difficultés pour l'attaquant. On distinguera dans un premier temps les difficultés qui sont inhérentes à la méthode et qui nécessitent une adaptation de la part de l'attaquant. On présentera ensuite des contre-mesures actives implémentées pour rendre l'attaque plus difficile voire impossible à réaliser.
 
-\section{Difficultés inhérentes à la méthode: variantes}
+\subsection{Difficultés inhérentes à la méthode}
 
-La méthode d'attaque présente un certain nombre de difficultés qui nécessitent une adaptation de la part de l'attaquant. Ainsi, les résultats obtenus lors de l'attaque dépendent évidemment de l'architecture considérée, des opportunités qu'a l'attaquant de manipuler le cache, mais également de l'état initial du cache et de la séquence d'accès à la mémoire. 
+Les résultats obtenus lors de l'attaque dépendent évidemment de l'architecture considérée, des opportunités qu'a l'attaquant de manipuler le cache, mais également de l'état initial du cache et de la séquence d'accès à la mémoire. 
 
 \paragraph{État initial du cache:} 
 
@@ -116,7 +118,9 @@ Une autre mesure consiste à regarder l'état du cache après l'étape de chiffr
 \paragraph{présence de bruit:} rend difficile la récupération des traces du chiffrement et donc .. %TODO C
 
 \section{Contre-mesures}
-L'évolution des technologies matérielles ainsi que les contre-mesures implémentées rendent désormais la \emph{Timing Cache Attack} plus difficile à mettre en \oe uvre. 
+
+\subsection{Evolution des technologies}
+L'évolution des technologies matérielles rend désormais la \emph{Timing Cache Attack} plus difficile à mettre en \oe uvre.
 
 \paragraph{Une attaque sur x86 plus difficile}
 Mowery~\cite{mowery2012aes} cite des évolutions matérielles rendant plus difficile voir impossible la mise en œuvre de l'attaque d'AES. Parmi celles-ci, on compte notamment le nouveau jeu d'instruction des processeurs Intel : AES-NI. Ce jeu d'instruction permet de traiter matériellement sur un composant dédié du processeur le chiffrement AES. Ainsi, il n'est plus du tout fait usage du cache. Le clair est chargé, et le chiffré est calculé sans aucune autre interaction avec la mémoire ou le cache.
@@ -135,14 +139,13 @@ L'évolution des technologies actuelles a entraîné l'apparition de deux phéno
 
 Une autre évolution réside dans la virtualisation des tâches, tendant à séparer les processus et les contextes. \cite{weiss2012cache}. Cependant, l'attaque exploitant les caches est dans ces cas une des seules qui puisse être mise en oeuvre depuis un environnement non sécurisé vers un environnement sécurisé. C'est par exemple le cas sur les environnement de type téléphone mobile, où l'OS et l'environnement sécurisé effectuant les opérations de cryptographie sont séparés par de la virtualisation. Cependant, un attaquant corrompant l'OS (à l'aide d'un cheval de Troie par exemple) pourra par la suite mener une \emph{Cache Timing Attack} contre l'environnement sécurisé, le cache étant partagé malgré la virtualisation.
 
-\paragraph{Implémentation d'un algorithme en temps constant}
-- algo en temps constant = Implémentation d'AES résistante aux timing attacks~\cite{kasper2009faster}
-
-\paragraph{Autres contres-mesures}
-- puces crypto dédiées, algos différents.. cf papiers "contre-mesures" dans biblio %TODO J (et à compléter) 
+\subsection{Contre-mesures avancées}
+-Tentatives d'implémenter algo en temps constant 
+-puces crypto dédiées, algos différents.. cf papiers "contre-mesures" dans biblio + Implémentation d'AES résistante aux timing attacks~\cite{kasper2009faster} %J (et à compléter)
 
 
-% j'ai supprimé les contournements parce qu'on en parle dans les contre mesures
+\section{Contournements}
+Attaques à l'heure actuelle : mise en place, contournement des contre-mesures %TODO
 
 \section*{Conclusion}
 %TODO
