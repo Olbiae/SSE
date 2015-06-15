@@ -139,13 +139,17 @@ Un autre moyen d'éviter que les variables utilisées lors du chiffrement soient
 
 Pour pallier aux interruptions du code, durant lesquelles les boîtes S peuvent sortir du cache, on peut imaginer que le noyau désactive les interruptions lors du chiffrement AES. Une autre solution serait, si une interruption ou un événement anormal a lieu, de volontairement vider le contenu du cache afin d'éviter que toute information soit récupérée~\cite{canteaut2006understanding}.
 
+
 %Par ailleurs, d'autres conflits peuvent faire obstacle à l'exécution en temps constant: l'existence de conflit entre \emph{load} et \emph{store}, ou encore des conflits entre \emph{load} de différentes banques de cache. -> décalages savants en mémoire, modulo truc d'instructions
 
 
 Implémentation d'AES résistante aux timing attacks~\cite{kasper2009faster} %TODO C en cours
 
 \paragraph{Autres contres-mesures}
-- puces crypto dédiées, algos différents.. cf papiers "contre-mesures" dans biblio %TODO J (et à compléter) 
+\cite{kasper2009faster} cite également de nombreuse méthodes alternatives, permettant de se prémunir face à ce type d'attaques. Cependant, ces contre-mesures impliquent souvent une grande perte de performance, et offrent parfois peu de protection.
+Tout d'abord, pour se prémunir face à certaines attaques logicielles, il peut être intéressant de désactiver le multithreading. En allouant un cœur à l'opération de chiffrement, et en interdisant à d'autres processus de s'exécuter, on empêche ainsi les mesures logicielles sur les caches L1 et L2. L'attaque devient ainsi plus difficile.
+Il est également possible dans certaines architectures (Intel Ceon, certains processeurs ARM, ...) de totalement désactiver l'utilisation du lors du chiffrement. Cette opération ne peut se faire qu'en mode noyaux et est donc effectuée par l'OS. Cependant, ce type de solution est assez radical et se traduit par un coup assez élevé dans le temps d'exécution.
+D'autres méthodes existent, comme normaliser le cache, c'est à dire garder en permanence l'ensemble des \emph{Lookup Tables} stockées, mais si elle permettent de se prémunir face aux attaque de premier ordre, elle ne résistent pas longtemps face à une analyse statistique plus fouillée.
 
 
 \section*{Conclusion}
